@@ -1,18 +1,4 @@
-/*
- * Copyright 2022 - 2024 Anton Tananaev (anton@traccar.org)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.traccar.api.security;
 
 import com.warrenstrange.googleauth.GoogleAuthenticator;
@@ -87,17 +73,20 @@ public class LoginService {
         return new LoginResult(user, tokenData.getExpiration());
     }
 
-    public LoginResult login(String email, String password, Integer code) throws StorageException {
+//    public LoginResult login(String email, String password, Integer code) throws StorageException {
+    public LoginResult login(String username, String password, Integer code) throws StorageException {
         if (forceOpenId) {
             return null;
         }
 
-        email = email.trim();
+//        email = email.trim();
+        username = username.trim();
         User user = storage.getObject(User.class, new Request(
                 new Columns.All(),
                 new Condition.Or(
-                        new Condition.Equals("email", email),
-                        new Condition.Equals("login", email))));
+//                        new Condition.Equals("email", email),
+                        new Condition.Equals("username", username),
+                        new Condition.Equals("login", username))));
         if (user != null) {
             if (ldapProvider != null && user.getLogin() != null && ldapProvider.login(user.getLogin(), password)
                     || !forceLdap && user.isPasswordValid(password)) {
@@ -106,8 +95,10 @@ public class LoginService {
                 return new LoginResult(user);
             }
         } else {
-            if (ldapProvider != null && ldapProvider.login(email, password)) {
-                user = ldapProvider.getUser(email);
+//            if (ldapProvider != null && ldapProvider.login(email, password)) {
+            if (ldapProvider != null && ldapProvider.login(username, password)) {
+//                user = ldapProvider.getUser(email);
+                user = ldapProvider.getUser(username);
                 user.setId(storage.addObject(user, new Request(new Columns.Exclude("id"))));
                 checkUserEnabled(user);
                 return new LoginResult(user);
@@ -116,16 +107,18 @@ public class LoginService {
         return null;
     }
 
-    public LoginResult login(String email, String name, boolean administrator) throws StorageException {
+//    public LoginResult login(String email, String name, boolean administrator) throws StorageException {
+    public LoginResult login(String username, String name, boolean administrator) throws StorageException {
         User user = storage.getObject(User.class, new Request(
             new Columns.All(),
-            new Condition.Equals("email", email)));
+            new Condition.Equals("username", username)));
 
         if (user == null) {
             user = new User();
             UserUtil.setUserDefaults(user, config);
             user.setName(name);
-            user.setEmail(email);
+//            user.setEmail(email);
+            user.setUsername(username);
             user.setFixedEmail(true);
             user.setAdministrator(administrator);
             user.setId(storage.addObject(user, new Request(new Columns.Exclude("id"))));

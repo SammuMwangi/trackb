@@ -113,7 +113,8 @@ public class SessionResource extends BaseResource {
     @PermitAll
     @POST
     public User add(
-            @FormParam("email") String email,
+//            @FormParam("email") String email,
+            @FormParam("username") String email,
             @FormParam("password") String password,
             @FormParam("code") Integer code) throws StorageException {
         LoginResult loginResult;

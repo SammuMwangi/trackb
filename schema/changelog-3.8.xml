@@ -107,6 +107,9 @@
       <column name="model" type="VARCHAR(128)" />
     </addColumn>
     <addColumn tableName="devices">
+      <column name="username" type="VARCHAR(128)" />
+    </addColumn>
+    <addColumn tableName="devices">
       <column name="contact" type="VARCHAR(512)" />
     </addColumn>
     <addColumn tableName="devices">
@@ -118,6 +121,9 @@
     </addColumn>
     <addColumn tableName="users">
       <column name="expirationtime" type="TIMESTAMP" />
+    </addColumn>
+    <addColumn tableName="devices">
+      <column name="remarks" type="VARCHAR(128)" />
     </addColumn>
     <addColumn tableName="users">
       <column name="devicelimit" type="INT" defaultValueNumeric="0" />

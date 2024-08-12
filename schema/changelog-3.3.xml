@@ -24,6 +24,9 @@
       <column name="email" type="VARCHAR(128)">
         <constraints nullable="false" />
       </column>
+      <column name="username" type="VARCHAR(128)">
+        <constraints nullable="false" />
+      </column>
       <column name="hashedpassword" type="VARCHAR(128)">
         <constraints nullable="false" />
       </column>
